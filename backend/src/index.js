@@ -26,6 +26,7 @@ app.set('trust proxy', 1);
 // Security headers. Relax CSP so YouTube iframes + archive.org video still load.
 app.use(helmet({
   contentSecurityPolicy: isProd ? {
+    useDefaults: false,
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc:  ["'self'", "'unsafe-inline'", 'https://checkout.razorpay.com'],
@@ -35,6 +36,9 @@ app.use(helmet({
       frameSrc:   ['https://www.youtube-nocookie.com', 'https://api.razorpay.com', 'https://checkout.razorpay.com'],
       connectSrc: ["'self'", 'https://api.razorpay.com', 'https://archive.org'],
       objectSrc:  ["'none'"],
+      baseUri:    ["'self'"],
+      // NOTE: not setting `upgrade-insecure-requests` — it would break plain-HTTP
+      // local testing. Render serves HTTPS natively, so this is safe.
     },
   } : false,
   crossOriginEmbedderPolicy: false,
