@@ -1,0 +1,64 @@
+# Render.com blueprint — deploy Knowall with ONE click.
+#
+# Usage:
+#   1. Push this repo to GitHub.
+#   2. Go to https://dashboard.render.com/select-repo?type=blueprint → pick your repo.
+#   3. Render reads this file, spins up the web service + managed Postgres.
+#   4. After first deploy, go to the web service → Shell → run:
+#        psql $DATABASE_URL -f backend/src/db/schema.sql
+#      (and optionally seed.sql for demo data)
+#   5. Fill in the envs marked `sync: false` from Render's dashboard.
+#
+# Free tier caveats:
+#   - Web service sleeps after 15 min idle (first request cold-starts for ~30s).
+#   - Postgres free tier expires in 90 days; upgrade to $7/mo for permanence.
+
+services:
+  - type: web
+    name: knowall
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: knowall-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        # Leave blank — same-origin deployment doesn't need CORS
+        value: ''
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+      # AWS keys left blank by default → backend auto-uses local upload mode.
+      # Fill these in later when you want S3/CloudFront video hosting.
+      - key: AWS_REGION
+        value: ap-south-1
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: S3_BUCKET
+        sync: false
+      - key: CLOUDFRONT_DOMAIN
+        sync: false
+      - key: CLOUDFRONT_KEY_PAIR_ID
+        sync: false
+      - key: CLOUDFRONT_PRIVATE_KEY
+        sync: false
+
+databases:
+  - name: knowall-db
+    plan: free
+    postgresMajorVersion: 16
