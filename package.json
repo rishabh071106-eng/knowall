@@ -5,7 +5,7 @@
   "description": "Knowall — learn anything for ₹10",
   "scripts": {
     "install:all": "npm --prefix backend install && npm --prefix frontend install",
-    "build": "npm --prefix frontend run build && rm -rf backend/public && mv frontend/dist backend/public",
+    "build": "npm --prefix frontend run build && rm -rf backend/public && mv frontend/dist backend/public && sed -i.bak 's/ crossorigin//g' backend/public/index.html && rm -f backend/public/index.html.bak",
     "start": "cd backend && NODE_ENV=production node src/index.js",
     "migrate": "psql \"$DATABASE_URL\" -f backend/src/db/schema.sql",
     "seed": "psql \"$DATABASE_URL\" -f backend/src/db/seed.sql",
