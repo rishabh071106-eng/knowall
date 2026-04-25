@@ -29,16 +29,19 @@ app.use(helmet({
     useDefaults: false,
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc:  ["'self'", "'unsafe-inline'", 'https://checkout.razorpay.com'],
-      styleSrc:   ["'self'", "'unsafe-inline'"],
-      imgSrc:     ["'self'", 'data:', 'https:'],
+      // Razorpay's checkout.js lazy-loads from many *.razorpay.com subdomains
+      // (cdn, api, lumberjack, etc.) — wildcard avoids whack-a-mole.
+      scriptSrc:  ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://*.razorpay.com'],
+      styleSrc:   ["'self'", "'unsafe-inline'", 'https://*.razorpay.com'],
+      imgSrc:     ["'self'", 'data:', 'blob:', 'https:'],
       mediaSrc:   ["'self'", 'https:', 'blob:'],
-      frameSrc:   ['https://www.youtube-nocookie.com', 'https://api.razorpay.com', 'https://checkout.razorpay.com'],
-      connectSrc: ["'self'", 'https://api.razorpay.com', 'https://archive.org'],
+      fontSrc:    ["'self'", 'https:', 'data:'],
+      frameSrc:   ["'self'", 'https://www.youtube-nocookie.com', 'https://*.razorpay.com'],
+      connectSrc: ["'self'", 'https://*.razorpay.com', 'https://archive.org', 'https://*.archive.org'],
       objectSrc:  ["'none'"],
       baseUri:    ["'self'"],
-      // NOTE: not setting `upgrade-insecure-requests` — it would break plain-HTTP
-      // local testing. Render serves HTTPS natively, so this is safe.
+      formAction: ["'self'", 'https://*.razorpay.com'],
+      // NOTE: not setting `upgrade-insecure-requests` — Render handles HTTPS at the edge.
     },
   } : false,
   crossOriginEmbedderPolicy: false,
