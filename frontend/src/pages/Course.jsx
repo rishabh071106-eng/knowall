@@ -44,7 +44,16 @@ export default function Course() {
         return;
       }
 
-      // Real Razorpay checkout.
+      // Real Razorpay checkout. Lazy-load Razorpay's script first.
+      if (!window.Razorpay) {
+        await new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+          s.onload = resolve;
+          s.onerror = () => reject(new Error('Could not load Razorpay'));
+          document.head.appendChild(s);
+        });
+      }
       const { orderId, amount, currency, keyId, course } = resp;
       await new Promise((resolve, reject) => {
         const rzp = new window.Razorpay({
