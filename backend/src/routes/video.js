@@ -1,16 +1,28 @@
 import { Router } from 'express';
+import jwt from 'jsonwebtoken';
 import { query } from '../db.js';
-import { requireAuth } from '../middleware/auth.js';
 import { signCloudFrontUrl } from '../services/s3.js';
 import { config } from '../config.js';
 
 export const videoRouter = Router();
 
+// Optional-auth: parses the JWT if present, but does NOT 401 if missing.
+// Free preview lessons should be watchable without an account.
+function parseUserIfPresent(req) {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  if (!token) return null;
+  try { return jwt.verify(token, config.jwtSecret); }
+  catch { return null; }
+}
+
 // Issue a playable URL for a lesson's video.
 //  - If video_key is already an http(s) URL (dev mode / external host), return as-is.
 //  - Otherwise sign it through CloudFront (production path).
-// Access: purchase required unless lesson.is_preview is true.
-videoRouter.get('/:lessonId/url', requireAuth, async (req, res) => {
+// Access policy:
+//   - is_preview = true → no auth required, anyone can watch
+//   - is_preview = false → requires login + (admin OR instructor-owner OR paid purchase)
+videoRouter.get('/:lessonId/url', async (req, res) => {
   const { lessonId } = req.params;
 
   const { rows } = await query(
@@ -22,13 +34,16 @@ videoRouter.get('/:lessonId/url', requireAuth, async (req, res) => {
   if (!lesson) return res.status(404).json({ error: 'lesson not found' });
   if (!lesson.video_key) return res.status(409).json({ error: 'video not uploaded yet' });
 
+  // For non-preview lessons, enforce auth + ownership/purchase.
   if (!lesson.is_preview) {
-    // Admins always watch. Instructors watch their own. Others need a paid purchase.
-    let allowed = req.user.role === 'admin';
-    if (!allowed && req.user.role === 'instructor') {
+    const user = parseUserIfPresent(req);
+    if (!user) return res.status(401).json({ error: 'sign in to watch this lesson' });
+
+    let allowed = user.role === 'admin';
+    if (!allowed && user.role === 'instructor') {
       const { rows: own } = await query(
         `SELECT 1 FROM courses WHERE id = $1 AND instructor_id = $2`,
-        [lesson.course_id, req.user.id]
+        [lesson.course_id, user.id]
       );
       allowed = own.length > 0;
     }
@@ -36,7 +51,7 @@ videoRouter.get('/:lessonId/url', requireAuth, async (req, res) => {
       const { rows: paid } = await query(
         `SELECT 1 FROM purchases
           WHERE user_id = $1 AND course_id = $2 AND status = 'paid'`,
-        [req.user.id, lesson.course_id]
+        [user.id, lesson.course_id]
       );
       if (!paid.length) return res.status(402).json({ error: 'purchase required' });
     }

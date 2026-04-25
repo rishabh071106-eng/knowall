@@ -34,7 +34,23 @@ export default function VideoPlayer({ lessonId }) {
     })();
   }, [lessonId]);
 
-  if (err) return <div className="p-6 bg-red-50 text-red-700 rounded">Could not load video: {err}</div>;
+  if (err) {
+    // Pretty up the most common errors
+    const msg = String(err);
+    let friendly = msg;
+    if (msg.includes('sign in')) friendly = 'Please sign in or create a free account to watch this lesson.';
+    else if (msg.includes('purchase required')) friendly = 'Buy this course (₹10) to watch this lesson.';
+    else if (msg.includes('missing token')) friendly = 'Please sign in or create a free account to watch this lesson.';
+    else if (msg.includes('not uploaded yet')) friendly = 'This lesson does not have a video uploaded yet.';
+    return (
+      <div className="aspect-video bg-slate-900 text-white rounded-lg flex items-center justify-center p-8 text-center">
+        <div>
+          <div className="text-3xl mb-2">🎥</div>
+          <div className="text-lg">{friendly}</div>
+        </div>
+      </div>
+    );
+  }
   if (!url) return <div className="p-6 bg-slate-100 rounded animate-pulse aspect-video" />;
 
   // YouTube embed
