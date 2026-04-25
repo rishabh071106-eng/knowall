@@ -7,7 +7,7 @@ export default function Refund() {
   return (
     <LegalLayout title="Refund & Cancellation Policy" lastUpdated="April 2026">
       <p>
-        At <strong>[YOUR LEGAL NAME / BUSINESS NAME]</strong>, we want you to be
+        At <strong>Rishabh Sharma</strong>, we want you to be
         confident in your purchase. Because Knowall sells digital, instantly-deliverable
         course content, our refund policy is structured to protect both students and
         instructors.
@@ -28,7 +28,7 @@ export default function Refund() {
 
       <h2>3. How to request a refund</h2>
       <p>
-        Email <a href="mailto:[YOUR EMAIL]">[YOUR EMAIL]</a> from the email address on
+        Email <a href="mailto:rishabh071106@gmail.com">rishabh071106@gmail.com</a> from the email address on
         your Knowall account, with subject line "Refund request — [course name]".
         Include the course you'd like refunded and the reason.
       </p>
@@ -58,7 +58,7 @@ export default function Refund() {
 
       <h2>7. Contact</h2>
       <p>
-        For all refund and cancellation matters: <a href="mailto:[YOUR EMAIL]">[YOUR EMAIL]</a>.
+        For all refund and cancellation matters: <a href="mailto:rishabh071106@gmail.com">rishabh071106@gmail.com</a>.
       </p>
     </LegalLayout>
   );

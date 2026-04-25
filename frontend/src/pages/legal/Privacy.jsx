@@ -6,7 +6,7 @@ export default function Privacy() {
   return (
     <LegalLayout title="Privacy Policy" lastUpdated="April 2026">
       <p>
-        This Privacy Policy explains how <strong>[YOUR LEGAL NAME / BUSINESS NAME]</strong>
+        This Privacy Policy explains how <strong>Rishabh Sharma</strong>
         ("we", "us") collects, uses, and protects information when you use Knowall
         (the "Service").
       </p>
@@ -40,14 +40,14 @@ export default function Privacy() {
         <li><strong>Razorpay</strong> — payment processing. <a href="https://razorpay.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a></li>
         <li><strong>YouTube</strong> (when courses use YouTube embeds) — subject to YouTube's own privacy terms when you watch a video.</li>
         <li><strong>Internet Archive</strong> — when courses use archive.org videos.</li>
-        <li><strong>[Your hosting provider, e.g. Render]</strong> — runs the servers, sees traffic logs.</li>
-        <li><strong>[Your email provider, if you add one — e.g. SendGrid]</strong> — sends transactional emails.</li>
+        <li><strong>Render</strong> — hosts our servers in Mumbai/Oregon, sees standard traffic logs. <a href="https://render.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a></li>
+        <li><strong>GitHub</strong> — stores our application source code; does not see user data.</li>
       </ul>
 
       <h2>5. Your rights</h2>
       <p>You can:</p>
       <ul>
-        <li>Access the personal data we hold about you (email <a href="mailto:[YOUR EMAIL]">[YOUR EMAIL]</a>).</li>
+        <li>Access the personal data we hold about you (email <a href="mailto:rishabh071106@gmail.com">rishabh071106@gmail.com</a>).</li>
         <li>Correct any inaccurate data via your account settings.</li>
         <li>Delete your account, which removes your personal data within 30 days (purchase records may be retained for tax/audit purposes).</li>
         <li>Object to processing or withdraw consent at any time.</li>
@@ -80,7 +80,7 @@ export default function Privacy() {
 
       <h2>10. Contact</h2>
       <p>
-        Email <a href="mailto:[YOUR EMAIL]">[YOUR EMAIL]</a> for any privacy questions
+        Email <a href="mailto:rishabh071106@gmail.com">rishabh071106@gmail.com</a> for any privacy questions
         or data requests.
       </p>
     </LegalLayout>

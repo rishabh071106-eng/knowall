@@ -10,7 +10,7 @@ export default function Terms() {
     <LegalLayout title="Terms of Service" lastUpdated="April 2026">
       <p>
         These Terms of Service ("Terms") govern your access to and use of Knowall
-        (the "Service"), operated by <strong>[YOUR LEGAL NAME / BUSINESS NAME]</strong>
+        (the "Service"), operated by <strong>Rishabh Sharma</strong>
         ("we", "us"). By creating an account or purchasing a course, you agree to these Terms.
       </p>
 
@@ -104,12 +104,12 @@ export default function Terms() {
       <h2>12. Governing law</h2>
       <p>
         These Terms are governed by the laws of India. Any dispute will be subject to the
-        exclusive jurisdiction of the courts at <strong>[YOUR CITY / DISTRICT]</strong>, India.
+        exclusive jurisdiction of the courts at <strong>Bengaluru</strong>, India.
       </p>
 
       <h2>13. Contact</h2>
       <p>
-        Questions? Email us at <a href="mailto:[YOUR EMAIL]">[YOUR EMAIL]</a> or visit
+        Questions? Email us at <a href="mailto:rishabh071106@gmail.com">rishabh071106@gmail.com</a> or visit
         the <a href="/contact">contact page</a>.
       </p>
     </LegalLayout>
