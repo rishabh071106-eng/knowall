@@ -24,27 +24,16 @@ const isProd = config.env === 'production';
 app.set('trust proxy', 1);
 
 // Security headers. Relax CSP so YouTube iframes + archive.org video still load.
+// Helmet — keep core security headers but DISABLE the strict ones that conflict
+// with Razorpay's multi-domain checkout flow and React module loading.
+// We keep: X-Content-Type-Options, X-Frame-Options, Strict-Transport-Security, etc.
+// We disable: CSP (Razorpay loads from too many domains), COOP (breaks Razorpay popups),
+// CORP (can interfere with module scripts), COEP (already off).
 app.use(helmet({
-  contentSecurityPolicy: isProd ? {
-    useDefaults: false,
-    directives: {
-      defaultSrc: ["'self'"],
-      // Razorpay's checkout.js lazy-loads from many *.razorpay.com subdomains
-      // (cdn, api, lumberjack, etc.) — wildcard avoids whack-a-mole.
-      scriptSrc:  ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://*.razorpay.com'],
-      styleSrc:   ["'self'", "'unsafe-inline'", 'https://*.razorpay.com'],
-      imgSrc:     ["'self'", 'data:', 'blob:', 'https:'],
-      mediaSrc:   ["'self'", 'https:', 'blob:'],
-      fontSrc:    ["'self'", 'https:', 'data:'],
-      frameSrc:   ["'self'", 'https://www.youtube-nocookie.com', 'https://*.razorpay.com'],
-      connectSrc: ["'self'", 'https://*.razorpay.com', 'https://archive.org', 'https://*.archive.org'],
-      objectSrc:  ["'none'"],
-      baseUri:    ["'self'"],
-      formAction: ["'self'", 'https://*.razorpay.com'],
-      // NOTE: not setting `upgrade-insecure-requests` — Render handles HTTPS at the edge.
-    },
-  } : false,
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
+  crossOriginOpenerPolicy: false,
+  crossOriginResourcePolicy: false,
 }));
 
 // CORS — comma-separated whitelist in CORS_ORIGIN. In prod behind one origin, not needed.
