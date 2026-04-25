@@ -25,7 +25,9 @@ export const config = {
   port: Number(process.env.PORT || 4000),
   env: process.env.NODE_ENV || 'development',
   jwtSecret: required('JWT_SECRET') || 'dev-only-unsafe-secret',
-  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  // Empty = allow all origins (correct default for same-origin prod deploys).
+  // For multi-origin setups, set CORS_ORIGIN=https://yoursite.com,https://other.com
+  corsOrigin: process.env.CORS_ORIGIN || '',
 
   databaseUrl: required('DATABASE_URL'),
 
